@@ -1,0 +1,6 @@
+{
+  "name": "DocxFlow",
+  "description": "DocxFlow: Private Lead Automation, Shared Inbox, and No-Code Chatbot Builder tailored for Company Docx Law & Accounting.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
