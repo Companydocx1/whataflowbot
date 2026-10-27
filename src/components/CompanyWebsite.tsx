@@ -593,12 +593,17 @@ export default function CompanyWebsite({ leads, messages, systemStatus, onRefres
 
           {/* B. Scheduled consult scheduler (docx.link/consult simulation) */}
           <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col gap-3">
-            <h4 className="text-xs font-sans font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
-              <Calendar className="w-4 h-4 text-amber-500" />
-              Direct Consultation Slot Booking (docx.link/consult)
-            </h4>
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-sans font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                <Calendar className="w-4 h-4 text-amber-500" />
+                Direct Consultation Slot Booking (docx.link/consult)
+              </h4>
+              <span className="text-[9px] font-mono font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800 px-2 py-0.5 rounded">
+                Retainer: ₹1,499
+              </span>
+            </div>
             <p className="text-[10px] text-slate-500 leading-normal">
-              Clients are routed here by the chatbot instruction scripts to instantly confirm appointments.
+              Clients are routed here by the chatbot instruction scripts to instantly confirm appointments. Standard initial strategy consult: <strong className="text-emerald-400 font-mono">₹1,499</strong> (credited against filing retainer).
             </p>
 
             {bookingConfirmed ? (
@@ -707,7 +712,7 @@ export default function CompanyWebsite({ leads, messages, systemStatus, onRefres
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
-                    placeholder="Ask e.g. What is Arthur Jenkins consultation fee?"
+                    placeholder="Ask e.g. What is the consultation fee? (₹1,499) or filing scope?"
                     className="flex-1 bg-slate-900 border border-slate-800 outline-none text-white text-[11px] p-1.5 rounded focus:border-indigo-500"
                   />
                   <button type="submit" className="p-1 px-2.5 bg-indigo-600 hover:bg-indigo-700 rounded text-white text-[10px] font-bold">

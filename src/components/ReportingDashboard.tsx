@@ -1,11 +1,15 @@
 import React from "react";
-import { TrendingUp, Clock, ShieldCheck, DollarSign, Layers, Layout, ArrowUpRight, Zap } from "lucide-react";
-import { Campaign, Lead, Message } from "../types";
+import { TrendingUp, Clock, ShieldCheck, IndianRupee, Layers, Layout, ArrowUpRight, Zap } from "lucide-react";
+import { Campaign, Lead, Message, QueueJob, ServiceItem } from "../types";
+import DashboardSummary from "./DashboardSummary";
+import FinancialSummary from "./FinancialSummary";
 
 interface ReportingProps {
   leads: Lead[];
   campaigns: Campaign[];
   messages: Message[];
+  queueJobs?: QueueJob[];
+  services?: ServiceItem[];
   edgeCachingEnabled: boolean;
 }
 
@@ -13,6 +17,8 @@ export default function ReportingDashboard({
   leads, 
   campaigns, 
   messages,
+  queueJobs,
+  services = [],
   edgeCachingEnabled
 }: ReportingProps) {
   // Statistics variables
@@ -36,6 +42,21 @@ export default function ReportingDashboard({
   return (
     <div className="flex flex-col gap-6 font-sans" id="reporting-root">
       
+      {/* Top Executive Dashboard Summary Component */}
+      <DashboardSummary
+        leads={leads}
+        campaigns={campaigns}
+        messages={messages}
+        queueJobs={queueJobs}
+      />
+
+      {/* Comprehensive Financial Summary Component */}
+      <FinancialSummary
+        leads={leads}
+        campaigns={campaigns}
+        services={services}
+      />
+
       {/* 4 Cards Overview */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="reporting-cards-grid">
         
@@ -55,13 +76,13 @@ export default function ReportingDashboard({
         <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
           <div>
             <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-gray-400">Matched campaign ROI</span>
-            <h4 className="text-2xl font-bold text-green-700 mt-1">${totalCampaignROI.toLocaleString()}</h4>
+            <h4 className="text-2xl font-bold text-green-700 mt-1">₹{totalCampaignROI.toLocaleString('en-IN')}</h4>
             <p className="text-[11px] text-green-600 mt-1 flex items-center gap-1 font-mono font-bold">
               <ArrowUpRight className="w-3" /> +22.4% MoM
             </p>
           </div>
           <div className="w-12 h-12 bg-green-50 border border-green-100 rounded-lg flex items-center justify-center text-green-600">
-            <DollarSign className="w-5 h-5" />
+            <IndianRupee className="w-5 h-5" />
           </div>
         </div>
 

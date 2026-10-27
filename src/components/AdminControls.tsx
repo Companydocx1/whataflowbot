@@ -1203,13 +1203,13 @@ export default function AdminControls({
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Filing Price Quote (USD or relative) *</label>
+                <label className="block font-bold text-slate-700 mb-1">Filing Price Quote (INR - Indian Format ₹) *</label>
                 <input
                   type="text"
                   required
                   value={srvPrice}
                   onChange={(e) => setSrvPrice(e.target.value)}
-                  placeholder="e.g. $299 or $99/month"
+                  placeholder="e.g. ₹7,499 or ₹2,499/month"
                   className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 outline-none focus:bg-white text-slate-800 font-bold font-mono"
                 />
               </div>

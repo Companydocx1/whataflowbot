@@ -341,7 +341,7 @@ let services: ServiceItem[] = [
     id: "srv-bus-1",
     category: "business_reg",
     name: "LLP (Limited Liability Partnership) Formation",
-    price: "$299",
+    price: "₹7,499",
     description: "Hybrid corporate structure registration with customized LLP agreements and regional filing representation.",
     requirements: ["Identity Proof of Partners", "Address Verification", "NOC from registered seat landlord"]
   },
@@ -349,7 +349,7 @@ let services: ServiceItem[] = [
     id: "srv-bus-2",
     category: "business_reg",
     name: "Private Limited Company Incorporation",
-    price: "$499",
+    price: "₹11,999",
     description: "End-to-end setup including digital signature, director identification number (DIN), and official certificate.",
     requirements: ["PAN & Aadhaar Identity files", "Registered Office proof", "Director profile draft"]
   },
@@ -357,7 +357,7 @@ let services: ServiceItem[] = [
     id: "srv-bus-3",
     category: "business_reg",
     name: "Sole Proprietorship / General Partnership Setup",
-    price: "$149",
+    price: "₹3,499",
     description: "Basic entity configuration, tax identification number, bank authorization, and legal name registration.",
     requirements: ["Identity Proof", "Business address utility bills"]
   },
@@ -365,7 +365,7 @@ let services: ServiceItem[] = [
     id: "srv-bus-4",
     category: "business_reg",
     name: "One Person Company (OPC) Registration",
-    price: "$349",
+    price: "₹8,999",
     description: "Incorporation for single founders wanting full corporate protection and nominee registries.",
     requirements: ["Founder ID", "Nominee agreement statement", "Office tenancy records"]
   },
@@ -374,7 +374,7 @@ let services: ServiceItem[] = [
     id: "srv-ngo-1",
     category: "ngo_reg",
     name: "Public Charitable Trust Registry",
-    price: "$399",
+    price: "₹9,999",
     description: "Drafting of solid Trust Deed, filing before sub-registrar, trustee coordination, and regulatory checklist.",
     requirements: ["Two trustees identity details", "Trust asset declaration", "Property ownership statement"]
   },
@@ -382,7 +382,7 @@ let services: ServiceItem[] = [
     id: "srv-ngo-2",
     category: "ngo_reg",
     name: "Society / Association NGO Bylaws Filing",
-    price: "$349",
+    price: "₹8,499",
     description: "Structuring Memorandum of Association (MoA), drafting bylaws, and registering in local state archives.",
     requirements: ["Aims & Objectives list", "At least 7 board members minimum"]
   },
@@ -390,7 +390,7 @@ let services: ServiceItem[] = [
     id: "srv-ngo-3",
     category: "ngo_reg",
     name: "Section 8 Non-Profit Company Setup",
-    price: "$599",
+    price: "₹14,999",
     description: "Central incorporation for formal non-profits. Maximum eligibility for systemic tax exceptions.",
     requirements: ["Project financial projection draft", "Identification of core directors"]
   },
@@ -399,7 +399,7 @@ let services: ServiceItem[] = [
     id: "srv-ip-1",
     category: "ip_reg",
     name: "Trademark Standard Registration",
-    price: "$199",
+    price: "₹4,999",
     description: "Trademark classification lookup, application filing before controller, and trademark status monitoring.",
     requirements: ["Brand name or logo high-res artwork", "Exact date of first market usage"]
   },
@@ -407,7 +407,7 @@ let services: ServiceItem[] = [
     id: "srv-ip-2",
     category: "ip_reg",
     name: "Logo & Brand Asset Copyright Setup",
-    price: "$149",
+    price: "₹3,999",
     description: "Copyright registry protection filing for website designs, layout grids, or software programming files.",
     requirements: ["Full work source file", "Declaration of original authorship"]
   },
@@ -415,7 +415,7 @@ let services: ServiceItem[] = [
     id: "srv-ip-3",
     category: "ip_reg",
     name: "Utility Patent Search & Drafting",
-    price: "$899",
+    price: "₹24,999",
     description: "Technical state-of-the-art search and drafting of professional patent filings.",
     requirements: ["Detailed utility description", "Patent graphics/designs"]
   },
@@ -423,7 +423,7 @@ let services: ServiceItem[] = [
     id: "srv-ip-4",
     category: "ip_reg",
     name: "Industrial Design Patent",
-    price: "$299",
+    price: "₹7,999",
     description: "Protecting aesthetic look-and-feel of consumer products and industrial enclosures.",
     requirements: ["Multiple-angle 3D vectors or drawings", "Classification statements"]
   },
@@ -432,7 +432,7 @@ let services: ServiceItem[] = [
     id: "srv-acc-1",
     category: "legal_accounting",
     name: "Annual GST Filing & Reconciliation",
-    price: "$99/month",
+    price: "₹2,499/month",
     description: "Preparation and filing of monthly business GST, credit audits, and complete record tracking.",
     requirements: ["Sales ledger spreadsheets", "Purchase invoice summaries"]
   },
@@ -440,7 +440,7 @@ let services: ServiceItem[] = [
     id: "srv-acc-2",
     category: "legal_accounting",
     name: "Bookkeeping & Periodic GAAP Reporting",
-    price: "$149/month",
+    price: "₹3,999/month",
     description: "Certified bookkeeper allocations, ledger maintenance, and custom profit-and-loss sheet creation.",
     requirements: ["Bank transaction files", "Central sales receipts"]
   },
@@ -448,7 +448,7 @@ let services: ServiceItem[] = [
     id: "srv-acc-3",
     category: "legal_accounting",
     name: "Corporate Income Tax Filing",
-    price: "$249",
+    price: "₹5,999",
     description: "Completing annual business tax returns, maximizing tax-deductible items, and securing filing proofs.",
     requirements: ["Bank statement files", "Previous financial tax reports"]
   },
@@ -456,7 +456,7 @@ let services: ServiceItem[] = [
     id: "srv-acc-4",
     category: "legal_accounting",
     name: "GAAP Financial Audit & Compliance Checks",
-    price: "$499",
+    price: "₹12,499",
     description: "Official auditing of balance sheets, internal accounting verification, and generating licensed auditor logs.",
     requirements: ["Central accounting platform access", "Past fiscal tax records"]
   },
@@ -464,7 +464,7 @@ let services: ServiceItem[] = [
     id: "srv-acc-5",
     category: "legal_accounting",
     name: "Corporate NDA & Contract Engineering",
-    price: "$199",
+    price: "₹4,999",
     description: "Drafting bulletproof NDA binders, software development contracts, or partner buy-out agreements.",
     requirements: ["Contract scope description", "Party legal credentials"]
   },
@@ -473,7 +473,7 @@ let services: ServiceItem[] = [
     id: "srv-web-1",
     category: "website",
     name: "Brand Domain Booking & SSL",
-    price: "$49",
+    price: "₹1,499",
     description: "Domain search, registration, and active SSL installation for safe enterprise communications.",
     requirements: ["Target domain choices", "Owner details"]
   },
@@ -481,7 +481,7 @@ let services: ServiceItem[] = [
     id: "srv-web-2",
     category: "website",
     name: "Corporate Landing Page with Chat Simulation",
-    price: "$599",
+    price: "₹14,999",
     description: "Developing custom, elegant website landing pages equipped with live responsive lead capture forms.",
     requirements: ["Writing guides", "Logo assets"]
   },
@@ -489,7 +489,7 @@ let services: ServiceItem[] = [
     id: "srv-web-3",
     category: "website",
     name: "CRM Lead Routing & API Webhook Integration",
-    price: "$349",
+    price: "₹8,999",
     description: "Connecting website intake forms with Hubspot, Salesforce, or custom WhatsApp auto-reply nodes.",
     requirements: ["CRM credentials", "Target flow parameters"]
   },
@@ -498,7 +498,7 @@ let services: ServiceItem[] = [
     id: "srv-off-1",
     category: "registered_office",
     name: "Premium Virtual Registered Office Address",
-    price: "$29/month",
+    price: "₹999/month",
     description: "Prestigious office address for receiving correspondence, mail forwarding scans, and compliance agents.",
     requirements: ["Company registration documents"]
   },
@@ -506,7 +506,7 @@ let services: ServiceItem[] = [
     id: "srv-off-2",
     category: "registered_office",
     name: "Agent for Service of Process",
-    price: "$99/year",
+    price: "₹2,499/year",
     description: "Providing a designated professional local agent to receive court files and compliance notices.",
     requirements: ["Articles of incorporation"]
   },
@@ -515,7 +515,7 @@ let services: ServiceItem[] = [
     id: "srv-cert-1",
     category: "industry_cert",
     name: "ISO 9001:2015 Quality Certificate",
-    price: "$249",
+    price: "₹6,499",
     description: "Quality management audit manuals, operation guidelines, and ISO certificate logging.",
     requirements: ["Operations flowchart", "Staff policy manual details"]
   },
@@ -523,7 +523,7 @@ let services: ServiceItem[] = [
     id: "srv-cert-2",
     category: "industry_cert",
     name: "MSME / Udyam registration",
-    price: "$79",
+    price: "₹1,999",
     description: "Enrolling business in small enterprise registries to enable priority collateral-free banking lines.",
     requirements: ["Aadhaar Card copy", "Company Ledger balance info"]
   },
@@ -531,7 +531,7 @@ let services: ServiceItem[] = [
     id: "srv-cert-3",
     category: "industry_cert",
     name: "Import-Export Code (IEC) Registration",
-    price: "$199",
+    price: "₹4,999",
     description: "Obtaining central customs clearance import-export certificate for worldwide trading.",
     requirements: ["PAN files", "Partnership deed or incorporation file", "Canceled cheque"]
   },
@@ -539,7 +539,7 @@ let services: ServiceItem[] = [
     id: "srv-cert-4",
     category: "industry_cert",
     name: "FSSAI (Food Safety License)",
-    price: "$199",
+    price: "₹4,999",
     description: "Securing food hygiene and manufacturer operating license before commercial dispatch.",
     requirements: ["Layout outline of location", "Identify of promoter", "Item list"]
   }

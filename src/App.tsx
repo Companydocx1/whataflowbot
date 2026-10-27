@@ -25,10 +25,42 @@ import {
   Globe
 } from "lucide-react";
 import CompanyWebsite from "./components/CompanyWebsite";
+import ViewportFAB from "./components/ViewportFAB";
+import GoogleWorkspaceHub from "./components/GoogleWorkspaceHub";
+import { initAuth, googleSignIn, logout } from "./services/googleAuth";
+import { User } from "firebase/auth";
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState<'inbox' | 'crm' | 'workflow' | 'campaigns' | 'dashboard' | 'comparison' | 'website' | 'admin-controls'>('website');
+  const [activeTab, setActiveTab] = useState<'inbox' | 'crm' | 'workflow' | 'campaigns' | 'dashboard' | 'comparison' | 'website' | 'admin-controls' | 'workspace'>('website');
   const [currentRole, setRole] = useState<UserRole>('admin');
+  const [isViewportHovered, setIsViewportHovered] = useState(false);
+  const [googleUser, setGoogleUser] = useState<User | null>(null);
+  const [isLoggingInGoogle, setIsLoggingInGoogle] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = initAuth(
+      (u) => setGoogleUser(u),
+      () => setGoogleUser(null)
+    );
+    return () => unsubscribe();
+  }, []);
+
+  const handleGoogleSignIn = async () => {
+    setIsLoggingInGoogle(true);
+    try {
+      const res = await googleSignIn();
+      if (res) setGoogleUser(res.user);
+    } catch (err) {
+      console.error("Google sign in error:", err);
+    } finally {
+      setIsLoggingInGoogle(false);
+    }
+  };
+
+  const handleGoogleSignOut = async () => {
+    await logout();
+    setGoogleUser(null);
+  };
   
   // App Sync State
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -260,10 +292,19 @@ export default function App() {
         systemStatus={systemStatus}
         toggleCache={toggleEdgeCacheOnServer}
         toggleAsync={toggleAsyncOnServer}
+        googleUser={googleUser}
+        onGoogleSignIn={handleGoogleSignIn}
+        onGoogleSignOut={handleGoogleSignOut}
+        isLoggingIn={isLoggingInGoogle}
       />
 
       {/* Main viewport area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6" id="docxflow-viewport">
+      <main
+        onMouseEnter={() => setIsViewportHovered(true)}
+        onMouseLeave={() => setIsViewportHovered(false)}
+        className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 flex flex-col gap-6"
+        id="docxflow-viewport"
+      >
         
         {/* Gemini Quota Exceeded Notification Toast */}
         {systemStatus?.geminiQuotaExceeded && (
@@ -392,6 +433,20 @@ export default function App() {
             Stakeholder Reporting
           </button>
 
+          {/* Google Workspace Suite Tab */}
+          <button
+            onClick={() => setActiveTab('workspace')}
+            className={`px-4 py-2.5 text-xs font-semibold tracking-wide flex items-center gap-1.5 border-b-2 transition-all ${
+              activeTab === 'workspace'
+                ? "border-emerald-600 text-emerald-700 bg-emerald-50/50"
+                : "border-transparent text-slate-500 hover:text-slate-800 hover:bg-slate-100"
+            }`}
+            id="tab-btn-workspace"
+          >
+            <Mail className="w-4 h-4 text-emerald-600" />
+            Google Workspace (Gmail • Drive • Sheets)
+          </button>
+
           {/* Admin Control Center Tab */}
           <button
             onClick={() => setActiveTab('admin-controls')}
@@ -473,6 +528,8 @@ export default function App() {
                 leads={leads}
                 campaigns={campaigns}
                 messages={messages}
+                queueJobs={queueJobs}
+                services={services}
                 edgeCachingEnabled={systemStatus.edgeCachingEnabled}
               />
             )}
@@ -497,9 +554,23 @@ export default function App() {
                 onUpdateLeadField={handleUpdateLeadField}
               />
             )}
+
+            {activeTab === 'workspace' && (
+              <GoogleWorkspaceHub leads={leads} />
+            )}
           </div>
         )}
       </main>
+
+      {/* Dynamic Viewport Floating Action Button (FAB) & Shortcuts Panels */}
+      <ViewportFAB
+        leads={leads}
+        campaigns={campaigns}
+        onAddLead={handleAddLead}
+        onSendMessage={handleSendMessage}
+        onLaunchCampaign={handleLaunchCampaign}
+        isViewportHovered={isViewportHovered}
+      />
 
       {/* Corporate Slate/Gold Footer element */}
       <footer className="bg-slate-900 border-t border-slate-800 py-4 text-center text-slate-400 text-[10px] font-mono mt-12" id="docxflow-footer-info">

@@ -126,7 +126,7 @@ export default function BroadcastCampaigns({
                       </div>
                       <div>
                         <span className="text-slate-400 block text-[9px] uppercase tracking-wider font-mono">ROI Attribution</span>
-                        <strong className="text-green-700 font-bold">${camp.roiValue}</strong>
+                        <strong className="text-green-700 font-bold">₹{camp.roiValue.toLocaleString('en-IN')}</strong>
                       </div>
                     </div>
                   ) : camp.status === "Sending" ? (

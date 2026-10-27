@@ -23,7 +23,10 @@ import {
   Terminal,
   Check,
   Upload,
-  FileSpreadsheet
+  FileSpreadsheet,
+  Download,
+  IndianRupee,
+  Clock
 } from "lucide-react";
 
 interface CRMTableProps {
@@ -345,6 +348,88 @@ Our experts are standing by!`);
     }
   };
 
+  // State for CSV export feedback banner
+  const [exportSuccessMessage, setExportSuccessMessage] = useState<string | null>(null);
+
+  // Structured CSV Export Handler
+  const handleExportToCSV = () => {
+    const listToExport = filteredLeads.length > 0 ? filteredLeads : leads;
+    if (listToExport.length === 0) {
+      alert("No lead records available to export.");
+      return;
+    }
+
+    const headers = [
+      "Lead ID",
+      "Full Name",
+      "Phone Number",
+      "Email Address",
+      "Practice Division",
+      "Pipeline Status",
+      "Lead Score",
+      "Temperature",
+      "Consultation Fee",
+      "Service Keyword",
+      "Assigned Agent",
+      "Booking Type",
+      "Booking Status",
+      "Booking Time",
+      "Created Date",
+      "Last Interaction",
+      "Notes"
+    ];
+
+    const escapeCSV = (value: any): string => {
+      if (value === null || value === undefined) return "";
+      const str = String(value);
+      if (str.includes('"') || str.includes(',') || str.includes('\n') || str.includes('\r')) {
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+      return str;
+    };
+
+    const rows = listToExport.map(lead => [
+      escapeCSV(lead.id),
+      escapeCSV(lead.name),
+      escapeCSV(lead.phone),
+      escapeCSV(lead.email),
+      escapeCSV(lead.type === 'law' ? 'Corporate Law' : 'Tax & Accounting'),
+      escapeCSV(lead.status),
+      escapeCSV(lead.score),
+      escapeCSV(lead.temperature),
+      escapeCSV(lead.consultationFee === 'Paid' ? 'Paid (₹1,499)' : lead.consultationFee === 'Waived' ? 'Waived (₹0)' : 'Unpaid (₹1,499)'),
+      escapeCSV(lead.keyword),
+      escapeCSV(lead.assignedAgent),
+      escapeCSV(lead.bookingType || 'None'),
+      escapeCSV(lead.bookingStatus || 'None'),
+      escapeCSV(lead.bookingTime || ''),
+      escapeCSV(lead.createdAt),
+      escapeCSV(lead.lastInteractionAt),
+      escapeCSV(lead.notes)
+    ].join(","));
+
+    // Prepend UTF-8 BOM (\uFEFF) to ensure spreadsheet software (Excel, Sheets) renders characters correctly
+    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\r\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    const dateStr = new Date().toISOString().split("T")[0];
+    const divisionTag = filterType !== 'all' ? `${filterType}_` : '';
+    const fileName = `company_docx_leads_${divisionTag}${dateStr}.csv`;
+    
+    link.href = url;
+    link.setAttribute("download", fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    setExportSuccessMessage(`Exported ${listToExport.length} lead record${listToExport.length === 1 ? '' : 's'} as "${fileName}"`);
+    setTimeout(() => {
+      setExportSuccessMessage(null);
+    }, 4500);
+  };
+
   return (
     <div className="flex flex-col gap-6" id="crm-table-root">
       {/* Top action header and filter panel */}
@@ -386,9 +471,9 @@ Our experts are standing by!`);
           </button>
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto">
           {/* Dynamic Search Box */}
-          <div className="relative flex-1 md:w-64">
+          <div className="relative flex-1 md:w-56">
             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-slate-450" />
             <input
               type="text"
@@ -399,6 +484,19 @@ Our experts are standing by!`);
               id="crm-search-input"
             />
           </div>
+
+          {/* Export to CSV Button */}
+          <button
+            onClick={handleExportToCSV}
+            disabled={leads.length === 0}
+            className="bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 text-xs font-bold px-3 py-2 rounded-lg border border-slate-300 shadow-sm flex items-center gap-1.5 transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+            id="crm-export-csv-btn"
+            title="Download current lead roster as a structured CSV file"
+          >
+            <Download className="w-4 h-4 text-slate-600" />
+            <span>Export to CSV</span>
+            <span className="text-[10px] text-slate-500 font-mono font-normal">({filteredLeads.length})</span>
+          </button>
 
           {/* Add New lead Toggle */}
           {!isReadOnly && (
@@ -430,6 +528,25 @@ Our experts are standing by!`);
           )}
         </div>
       </div>
+
+      {/* CSV Export Success Toast / Alert Banner */}
+      {exportSuccessMessage && (
+        <div 
+          className="bg-emerald-50 border border-emerald-300 text-emerald-800 text-xs px-4 py-2.5 rounded-xl flex items-center justify-between shadow-sm animate-fadeIn"
+          id="crm-export-success-banner"
+        >
+          <div className="flex items-center gap-2">
+            <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+            <span className="font-semibold">{exportSuccessMessage}</span>
+          </div>
+          <button 
+            onClick={() => setExportSuccessMessage(null)} 
+            className="text-emerald-700 hover:text-emerald-900 font-bold ml-2 text-sm leading-none"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Expandable Bulk Lead Import Form */}
       {showBulkImportForm && !isReadOnly && (
@@ -809,6 +926,57 @@ Our experts are standing by!`);
         </div>
       )}
 
+      {/* CRM Financial & Consultation Retainer KPI Strip (INR Format) */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-slate-200/90 shadow-sm" id="crm-financial-strip">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 flex-shrink-0">
+            <IndianRupee className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-slate-400 block">Retainers Collected</span>
+            <span className="text-base sm:text-lg font-black text-slate-900 font-sans">
+              ₹{(leads.filter(l => l.consultationFee === "Paid").length * 1499).toLocaleString('en-IN')}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700 flex-shrink-0">
+            <Clock className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-slate-400 block">Pending Invoices</span>
+            <span className="text-base sm:text-lg font-black text-amber-700 font-sans">
+              ₹{(leads.filter(l => l.consultationFee === "Unpaid").length * 1499).toLocaleString('en-IN')}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 flex-shrink-0">
+            <TrendingUp className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-slate-400 block">Est. Pipeline Value</span>
+            <span className="text-base sm:text-lg font-black text-indigo-900 font-sans">
+              ₹{((leads.filter(l => l.status === "Qualified" || l.status === "Proposal").length * 65000) + 120000).toLocaleString('en-IN')}
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-700 flex-shrink-0">
+            <Tag className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-slate-400 block">Standard Retainer Fee</span>
+            <span className="text-base sm:text-lg font-black text-slate-900 font-sans">
+              ₹1,499
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* CRM Main Grid Table */}
       <div className="bg-white rounded-xl shadow-sm border border-slate-200/80 overflow-hidden" id="crm-main-table-container">
         <div className="overflow-x-auto">
@@ -818,14 +986,27 @@ Our experts are standing by!`);
                 <th className="p-4 font-bold">Client / Dossier</th>
                 <th className="p-4 font-bold">Phone & Email</th>
                 <th className="p-4 font-bold">Division</th>
-                <th className="p-4 font-bold">Consultation status</th>
+                <th className="p-4 font-bold">Consultation Fee (INR ₹)</th>
                 <th className="p-4 font-bold">Consultation booking tracker</th>
                 <th className="p-4 font-bold">Dynamic lead evaluation</th>
                 <th className="p-4 font-bold text-right">Intelligent Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredLeads.map((lead) => {
+              {filteredLeads.length === 0 ? (
+                <tr>
+                  <td colSpan={7} className="p-8 text-center text-slate-500 font-sans">
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <Users className="w-8 h-8 text-slate-300" />
+                      <p className="font-semibold text-sm">No prospect leads found</p>
+                      <p className="text-xs text-slate-400">
+                        {searchQuery ? `No results matching "${searchQuery}".` : "No leads in this division yet."}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                filteredLeads.map((lead) => {
                 const isEvaluating = scoringLeadId === lead.id;
                 const specificReport = aiReport[lead.id];
                 
@@ -858,17 +1039,26 @@ Our experts are standing by!`);
                       </span>
                     </td>
                     <td className="p-4">
-                      <select
-                        value={lead.consultationFee}
-                        disabled={isReadOnly}
-                        onChange={(e) => onUpdateLeadField(lead.id, { consultationFee: e.target.value as any })}
-                        className="bg-slate-50 border border-slate-200 rounded px-1.5 py-1 text-xs text-indigo-600 font-bold outline-none"
-                        id={`crm-fee-select-${lead.id}`}
-                      >
-                        <option value="Unpaid">❌ Invoice Unpaid</option>
-                        <option value="Paid">💳 Consultation PAID</option>
-                        <option value="Waived">Comped/No Fee</option>
-                      </select>
+                      <div className="flex flex-col gap-1">
+                        <select
+                          value={lead.consultationFee}
+                          disabled={isReadOnly}
+                          onChange={(e) => onUpdateLeadField(lead.id, { consultationFee: e.target.value as any })}
+                          className={`border rounded px-1.5 py-1 text-xs font-bold outline-none font-sans ${
+                            lead.consultationFee === 'Paid' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' :
+                            lead.consultationFee === 'Waived' ? 'bg-slate-50 border-slate-200 text-slate-600' :
+                            'bg-amber-50 border-amber-200 text-amber-800'
+                          }`}
+                          id={`crm-fee-select-${lead.id}`}
+                        >
+                          <option value="Unpaid">❌ Unpaid (₹1,499 Due)</option>
+                          <option value="Paid">💳 Paid (₹1,499 Settled)</option>
+                          <option value="Waived">🎁 Waived (₹0 Comped)</option>
+                        </select>
+                        <span className="text-[9.5px] font-mono font-semibold text-slate-400">
+                          {lead.consultationFee === 'Paid' ? '✓ ₹1,499 Received' : lead.consultationFee === 'Waived' ? 'Comped Strategy' : 'Invoice Pending'}
+                        </span>
+                      </div>
                     </td>
                     
                     {/* Consultation Booking Tracker Column */}
@@ -1008,7 +1198,7 @@ Our experts are standing by!`);
                     </td>
                   </tr>
                 );
-              })}
+              }))}
             </tbody>
           </table>
         </div>
